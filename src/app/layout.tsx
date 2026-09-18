@@ -1,10 +1,10 @@
 import type { Metadata, Viewport } from "next";
+import type { ReactNode } from "react";
 import { Inter, Sora } from "next/font/google";
 
-import { Footer } from "@/components/layout/footer";
-import { Header } from "@/components/layout/header";
 import { SkipLink } from "@/components/layout/skip-link";
 import { siteConfig } from "@/config/site";
+import { getSiteContent } from "@/lib/content/store";
 
 import "./globals.css";
 import "@/styles/motion.css";
@@ -22,50 +22,49 @@ const sora = Sora({
   display: "swap",
 });
 
-const siteUrl = siteConfig.url.replace(/\/$/, "");
-
-export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
-  title: {
-    default: siteConfig.title,
-    template: `%s | ${siteConfig.name}`,
-  },
-  description: siteConfig.description,
-  applicationName: siteConfig.name,
-  authors: [{ name: siteConfig.name }],
-  keywords: [
-    "digital products",
-    "sport",
-    "media",
-    "connected TV",
-    "product design",
-    "Player29",
-  ],
-  alternates: {
-    canonical: "/",
-  },
-  openGraph: {
-    type: "website",
-    locale: siteConfig.locale,
-    url: siteUrl,
-    siteName: siteConfig.name,
-    title: siteConfig.title,
-    description: siteConfig.description,
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: siteConfig.title,
-    description: siteConfig.description,
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
-  icons: {
-    icon: "/icon.png",
-    apple: "/apple-icon.png",
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const content = await getSiteContent();
+  const siteUrl = siteConfig.url.replace(/\/$/, "");
+  return {
+    metadataBase: new URL(siteUrl),
+    title: {
+      default: content.site.title,
+      template: `%s | ${content.site.name}`,
+    },
+    description: content.site.description,
+    applicationName: content.site.name,
+    authors: [{ name: content.site.name }],
+    keywords: [
+      "digital products",
+      "sport",
+      "media",
+      "connected TV",
+      "product design",
+      "Player29",
+    ],
+    openGraph: {
+      type: "website",
+      locale: siteConfig.locale,
+      url: siteUrl,
+      siteName: content.site.name,
+      title: content.site.title,
+      description: content.site.description,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: content.site.title,
+      description: content.site.description,
+    },
+    robots: {
+      index: true,
+      follow: true,
+    },
+    icons: {
+      icon: "/icon.png",
+      apple: "/apple-icon.png",
+    },
+  };
+}
 
 export const viewport: Viewport = {
   themeColor: siteConfig.themeColor,
@@ -73,35 +72,15 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-const organisationJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  name: siteConfig.name,
-  legalName: siteConfig.legalName,
-  url: siteUrl,
-  email: siteConfig.email,
-  description: siteConfig.description,
-  logo: `${siteUrl}/brand/player29-icon-dark.png`,
-  sameAs: [siteConfig.linkedin],
-};
-
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html
       lang="en-GB"
       className={`${inter.variable} ${sora.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-canvas text-ink">
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(organisationJsonLd),
-          }}
-        />
         <SkipLink />
-        <Header />
         {children}
-        <Footer />
       </body>
     </html>
   );

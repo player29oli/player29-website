@@ -7,10 +7,16 @@ import { Menu, X } from "lucide-react";
 
 import { Logo } from "@/components/brand/logo";
 import { buttonVariants } from "@/components/ui/button";
-import { hero, navigation } from "@/data/content";
+import type { LinkField } from "@/lib/content/schema";
 import { cn } from "@/lib/utils";
 
-export function MobileNav() {
+export function MobileNav({
+  navigation,
+  cta,
+}: {
+  navigation: LinkField[];
+  cta: LinkField;
+}) {
   const titleId = useId();
   const [open, setOpen] = useState(false);
 
@@ -65,7 +71,7 @@ export function MobileNav() {
               <nav aria-label="Mobile" className="flex flex-col gap-1 p-3">
                 {navigation.map((item) => (
                   <Link
-                    key={item.href}
+                    key={`${item.href}-${item.label}`}
                     href={item.href}
                     className="flex min-h-11 items-center rounded-[14px] px-3 text-base font-semibold text-ink"
                     onClick={() => setOpen(false)}
@@ -73,16 +79,18 @@ export function MobileNav() {
                     {item.label}
                   </Link>
                 ))}
-                <Link
-                  href={hero.primaryCta.href}
-                  className={cn(
-                    buttonVariants({ size: "cta" }),
-                    "mt-3 justify-center",
-                  )}
-                  onClick={() => setOpen(false)}
-                >
-                  {hero.primaryCta.label}
-                </Link>
+                {cta.label ? (
+                  <Link
+                    href={cta.href || "/#contact"}
+                    className={cn(
+                      buttonVariants({ size: "cta" }),
+                      "mt-3 justify-center",
+                    )}
+                    onClick={() => setOpen(false)}
+                  >
+                    {cta.label}
+                  </Link>
+                ) : null}
               </nav>
             </div>
           </div>,

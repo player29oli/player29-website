@@ -1,0 +1,42 @@
+import "server-only";
+
+type Bucket = {
+  count: number;
+  resetAt: number;
+};
+
+const WINDOW_MS = 15 * 60 * 1000;
+const MAX_ATTEMPTS = 8;
+const buckets = new Map<string, Bucket>();
+
+export function consumeLoginAttempt(key: string): {
+  ok: boolean;
+  retryAfterSec: number;
+} {
+  const now = Date.now();
+  const current = buckets.get(key);
+  if (!current || current.resetAt <= now) {
+    buckets.set(key, { count: 1, resetAt: now + WINDOW_MS });
+    return { ok: true, retryAfterSec: 0 };
+  }
+  if (current.count >= MAX_ATTEMPTS) {
+    return {
+      ok: false,
+      retryAfterSec: Math.max(1, Math.ceil((current.resetAt - now) / 1000)),
+    };
+  }
+  current.count += 1;
+  return { ok: true, retryAfterSec: 0 };
+}
+
+export function resetLoginAttempts(key: string) {
+  buckets.delete(key);
+}
+
+export function loginAttemptKey(headers: Headers): string {
+  const forwarded = headers.get("x-forwarded-for");
+  if (forwarded) {
+    return forwarded.split(",")[0]?.trim() || "unknown";
+  }
+  return headers.get("x-real-ip")?.trim() || "unknown";
+}

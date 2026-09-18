@@ -6,8 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { siteConfig } from "@/config/site";
-import { contact } from "@/data/content";
+import type { ClosingSection } from "@/lib/content/schema";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
@@ -15,7 +14,17 @@ function isValidEmail(value: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 }
 
-export function ContactForm() {
+export function ContactForm({
+  copy,
+  email,
+  name,
+  endpoint,
+}: {
+  copy: ClosingSection["contact"];
+  email: string;
+  name: string;
+  endpoint: string;
+}) {
   const [status, setStatus] = useState<Status>("idle");
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -23,36 +32,36 @@ export function ContactForm() {
     event.preventDefault();
     const form = event.currentTarget;
     const data = new FormData(form);
-    const name = String(data.get("name") ?? "").trim();
-    const email = String(data.get("email") ?? "").trim();
+    const senderName = String(data.get("name") ?? "").trim();
+    const senderEmail = String(data.get("email") ?? "").trim();
     const organisation = String(data.get("organisation") ?? "").trim();
     const message = String(data.get("message") ?? "").trim();
 
     const nextErrors: Record<string, string> = {};
-    if (!name) nextErrors.name = "Please enter your name.";
-    if (!email) nextErrors.email = "Please enter your email.";
-    else if (!isValidEmail(email)) nextErrors.email = "Enter a valid email address.";
-    if (!message) nextErrors.message = "Please add a short message.";
+    if (!senderName) nextErrors.name = copy.validation.nameRequired;
+    if (!senderEmail) nextErrors.email = copy.validation.emailRequired;
+    else if (!isValidEmail(senderEmail)) nextErrors.email = copy.validation.emailInvalid;
+    if (!message) nextErrors.message = copy.validation.messageRequired;
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) return;
 
     setStatus("submitting");
 
-    const payload = { name, email, organisation, message };
+    const payload = { name: senderName, email: senderEmail, organisation, message };
 
-    if (!siteConfig.contactFormEndpoint) {
-      const subject = encodeURIComponent(`Player29 enquiry from ${name}`);
+    if (!endpoint) {
+      const subject = encodeURIComponent(`${name} enquiry from ${senderName}`);
       const body = encodeURIComponent(
-        `${message}\n\n${name}${organisation ? `\n${organisation}` : ""}\n${email}`,
+        `${message}\n\n${senderName}${organisation ? `\n${organisation}` : ""}\n${senderEmail}`,
       );
-      window.location.href = `mailto:${siteConfig.email}?subject=${subject}&body=${body}`;
+      window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
       setStatus("success");
       form.reset();
       return;
     }
 
     try {
-      const response = await fetch(siteConfig.contactFormEndpoint, {
+      const response = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "application/json" },
         body: JSON.stringify(payload),
@@ -68,7 +77,7 @@ export function ContactForm() {
   return (
     <form onSubmit={onSubmit} className="grid gap-5" noValidate>
       <div className="grid gap-2">
-        <Label htmlFor="name">{contact.fields.name}</Label>
+        <Label htmlFor="name">{copy.fields.name}</Label>
         <Input
           id="name"
           name="name"
@@ -85,7 +94,7 @@ export function ContactForm() {
         ) : null}
       </div>
       <div className="grid gap-2">
-        <Label htmlFor="email">{contact.fields.email}</Label>
+        <Label htmlFor="email">{copy.fields.email}</Label>
         <Input
           id="email"
           name="email"
@@ -103,7 +112,7 @@ export function ContactForm() {
         ) : null}
       </div>
       <div className="grid gap-2">
-        <Label htmlFor="organisation">{contact.fields.organisation}</Label>
+        <Label htmlFor="organisation">{copy.fields.organisation}</Label>
         <Input
           id="organisation"
           name="organisation"
@@ -112,7 +121,7 @@ export function ContactForm() {
         />
       </div>
       <div className="grid gap-2">
-        <Label htmlFor="message">{contact.fields.message}</Label>
+        <Label htmlFor="message">{copy.fields.message}</Label>
         <Textarea
           id="message"
           name="message"
@@ -129,18 +138,18 @@ export function ContactForm() {
         ) : null}
       </div>
       <Button type="submit" size="cta" disabled={status === "submitting"}>
-        {status === "submitting" ? "Sending…" : contact.submit}
+        {status === "submitting" ? copy.sending : copy.submit}
       </Button>
       {status === "success" ? (
         <p role="status" className="text-sm font-medium text-ink">
-          {contact.success}
+          {copy.success}
         </p>
       ) : null}
       {status === "error" ? (
         <p role="alert" className="text-sm font-medium text-red-700">
-          {contact.error}{" "}
-          <a className="underline" href={`mailto:${siteConfig.email}`}>
-            {siteConfig.email}
+          {copy.error}{" "}
+          <a className="underline" href={`mailto:${email}`}>
+            {email}
           </a>
         </p>
       ) : null}

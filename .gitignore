@@ -59,3 +59,10 @@ Thumbs.db
 # local tooling scratch
 agent-tools/
 tmp-scaffold/
+
+# local content store (committed fallback is content/default.json)
+.data/
+
+# locally uploaded editor images
+public/uploads/*
+!public/uploads/.gitkeep

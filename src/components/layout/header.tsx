@@ -6,10 +6,16 @@ import Link from "next/link";
 import { Logo } from "@/components/brand/logo";
 import { MobileNav } from "@/components/layout/mobile-nav";
 import { buttonVariants } from "@/components/ui/button";
-import { hero, navigation } from "@/data/content";
+import type { LinkField } from "@/lib/content/schema";
 import { cn } from "@/lib/utils";
 
-export function Header() {
+export function Header({
+  navigation,
+  cta,
+}: {
+  navigation: LinkField[];
+  cta: LinkField;
+}) {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -39,7 +45,7 @@ export function Header() {
         <nav aria-label="Primary" className="hidden items-center gap-8 lg:flex">
           {navigation.map((item) => (
             <Link
-              key={item.href}
+              key={`${item.href}-${item.label}`}
               href={item.href}
               className="text-[15px] font-semibold text-ink/80 transition-colors hover:text-ink"
             >
@@ -49,15 +55,14 @@ export function Header() {
         </nav>
 
         <div className="hidden lg:block">
-          <Link
-            href={hero.primaryCta.href}
-            className={cn(buttonVariants({ size: "cta" }))}
-          >
-            {hero.primaryCta.label}
-          </Link>
+          {cta.label ? (
+            <Link href={cta.href || "/#contact"} className={cn(buttonVariants({ size: "cta" }))}>
+              {cta.label}
+            </Link>
+          ) : null}
         </div>
 
-        <MobileNav />
+        <MobileNav navigation={navigation} cta={cta} />
       </div>
     </header>
   );

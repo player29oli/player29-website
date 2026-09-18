@@ -1,19 +1,22 @@
-import { approach } from "@/data/content";
+import type { ApproachSection } from "@/lib/content/schema";
 
-export function Approach() {
+export function Approach({ section }: { section: ApproachSection }) {
   return (
     <section
+      id={section.anchor || undefined}
       aria-labelledby="approach-heading"
       className="py-20 md:py-32"
     >
       <div className="container-site">
         <div className="mb-12 max-w-2xl md:mb-16">
-          <p className="mb-4 text-sm font-semibold text-ink/60">Approach</p>
+          {section.eyebrow ? (
+            <p className="mb-4 text-sm font-semibold text-ink/60">{section.eyebrow}</p>
+          ) : null}
           <h2
             id="approach-heading"
             className="font-display text-[clamp(1.875rem,4vw,2.75rem)] leading-[1.15] font-bold"
           >
-            {approach.intro}
+            {section.intro}
           </h2>
         </div>
         <ol className="relative grid gap-8 md:grid-cols-4 md:gap-6">
@@ -21,8 +24,8 @@ export function Approach() {
             aria-hidden
             className="bg-ink/10 absolute top-5 right-0 left-0 hidden h-px md:block"
           />
-          {approach.stages.map((stage, index) => (
-            <li key={stage.number} className="relative">
+          {section.stages.map((stage, index) => (
+            <li key={`${stage.number}-${stage.title}`} className="relative">
               <span
                 aria-hidden
                 className={`mb-5 flex size-10 items-center justify-center rounded-full border bg-canvas text-sm font-semibold ${
