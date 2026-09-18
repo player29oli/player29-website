@@ -7,7 +7,7 @@ export const siteConfig = {
     "Player29 is a digital product company shaping and building engaging experiences across sport, media and connected TV.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://127.0.0.1:43129",
   locale: "en_GB",
-  email: "hello@player29.com",
+  email: "oli@player29.com",
   linkedin: "https://www.linkedin.com/company/player29",
   /**
    * Companies House number. Leave empty until confirmed — do not invent one.

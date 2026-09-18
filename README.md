@@ -161,20 +161,11 @@ Uncropped supplied files are kept in `public/brand/originals/`. Live files in `p
 
 ## GitHub workflow
 
-`main` is conceptually production. Use feature branches and pull requests for changes.
-
-Suggested remote (private): `player29-website`.
-
-If this repository is still on Cursor’s temporary git host, create the GitHub repo and push (Oliver may need to authenticate):
+Canonical remote (private): [player29oli/player29-website](https://github.com/player29oli/player29-website). `main` is conceptually production.
 
 ```bash
-# Using GitHub CLI, once authenticated
-gh auth login
-gh repo create player29-website --private --source . --remote github --push
-
-# Or create the empty private repo in the GitHub UI, then:
-git remote add github git@github.com:YOUR_USER/player29-website.git
-git push -u github main
+git remote add github https://github.com/player29oli/player29-website.git
+git push -u github HEAD:main
 ```
 
 Do not commit secrets.
