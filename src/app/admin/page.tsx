@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 
 import { AdminEditor } from "@/components/admin/admin-editor";
 import { isAdminConfigured } from "@/lib/auth/config";
-import { ensureCsrfToken, getSession } from "@/lib/auth/session";
+import { issueCsrfToken, getSession } from "@/lib/auth/session";
 import { getActiveStoreKind, readSiteContent } from "@/lib/content/store";
 
 export const metadata: Metadata = {
@@ -18,7 +18,7 @@ export default async function AdminPage() {
   const session = await getSession();
   if (!session) redirect("/login");
 
-  const csrfToken = await ensureCsrfToken();
+  const csrfToken = await issueCsrfToken();
   const { content, source } = await readSiteContent();
   const persistTo = getActiveStoreKind() === "blob" ? "blob" : "file";
 

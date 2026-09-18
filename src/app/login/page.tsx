@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 
 import { LoginForm } from "@/components/admin/login-form";
 import { isAdminConfigured } from "@/lib/auth/config";
-import { ensureCsrfToken, getSession } from "@/lib/auth/session";
+import { issueCsrfToken, getSession } from "@/lib/auth/session";
 
 export const metadata: Metadata = {
   title: { absolute: "Sign in" },
@@ -18,7 +18,7 @@ export default async function LoginPage() {
   if (session) redirect("/admin");
 
   const configured = isAdminConfigured();
-  const csrfToken = configured ? await ensureCsrfToken() : "";
+  const csrfToken = configured ? await issueCsrfToken() : "";
 
   return (
     <main

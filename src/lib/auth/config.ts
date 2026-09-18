@@ -1,7 +1,6 @@
 import "server-only";
 
 export const SESSION_COOKIE = "p29_session";
-export const CSRF_COOKIE = "p29_csrf";
 export const SESSION_MAX_AGE = 60 * 60 * 12;
 
 export function isAdminConfigured(): boolean {

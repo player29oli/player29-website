@@ -12,6 +12,7 @@ import {
   resetLoginAttempts,
 } from "@/lib/auth/rate-limit";
 import {
+  assertSameOrigin,
   clearSession,
   createSession,
   getSession,
@@ -31,6 +32,10 @@ export async function loginAction(
       error:
         "Content admin is not enabled on this environment. Set ADMIN_EMAIL, ADMIN_PASSWORD and AUTH_SECRET, then restart the server.",
     };
+  }
+
+  if (!(await assertSameOrigin())) {
+    return { error: "This form could not be verified. Refresh the page and try again." };
   }
 
   const csrf = String(formData.get("csrf") ?? "");
@@ -86,6 +91,9 @@ export async function saveContentAction(
       ok: false,
       error: "This form could not be verified. Refresh the page and try again.",
     };
+  }
+  if (!(await assertSameOrigin())) {
+    return { ok: false, error: "This form could not be verified. Refresh the page and try again." };
   }
   const parsed = parseSiteContent(input);
   if (!parsed) {

@@ -1,10 +1,9 @@
 import "server-only";
 
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { SignJWT, jwtVerify } from "jose";
 
 import {
-  CSRF_COOKIE,
   getAuthSecret,
   getAdminEmail,
   isAdminConfigured,
@@ -30,13 +29,11 @@ export async function createSession(email: string): Promise<void> {
 
   const store = await cookies();
   store.set(SESSION_COOKIE, token, sessionCookieOptions());
-  await ensureCsrfToken();
 }
 
 export async function clearSession(): Promise<void> {
   const store = await cookies();
   store.set(SESSION_COOKIE, "", sessionCookieOptions(0));
-  store.set(CSRF_COOKIE, "", sessionCookieOptions(0));
 }
 
 export async function getSession(): Promise<AdminSession | null> {
@@ -67,20 +64,47 @@ export async function requireSession(): Promise<AdminSession> {
   return session;
 }
 
-export async function ensureCsrfToken(): Promise<string> {
-  const store = await cookies();
-  const existing = store.get(CSRF_COOKIE)?.value;
-  if (existing && existing.length >= 24) return existing;
-  const token = crypto.randomUUID().replace(/-/g, "") + crypto.randomUUID().replace(/-/g, "");
-  store.set(CSRF_COOKIE, token, sessionCookieOptions());
-  return token;
+export async function issueCsrfToken(): Promise<string> {
+  const secret = getAuthSecret();
+  if (!secret) return "";
+  return new SignJWT({ purpose: "csrf" })
+    .setProtectedHeader({ alg: "HS256" })
+    .setIssuedAt()
+    .setExpirationTime("2h")
+    .sign(secret);
 }
 
 export async function verifyCsrfToken(candidate: string | null | undefined): Promise<boolean> {
-  const store = await cookies();
-  const expected = store.get(CSRF_COOKIE)?.value;
-  if (!expected || !candidate) return false;
-  return secretsEqual(candidate, expected);
+  const secret = getAuthSecret();
+  if (!secret || !candidate) return false;
+  try {
+    const { payload } = await jwtVerify(candidate, secret, { algorithms: ["HS256"] });
+    return payload.purpose === "csrf";
+  } catch {
+    return false;
+  }
+}
+
+export async function assertSameOrigin(): Promise<boolean> {
+  const headerList = await headers();
+  const origin = headerList.get("origin");
+  if (!origin) {
+    const referer = headerList.get("referer");
+    if (!referer) return true;
+    return hostMatches(referer, headerList);
+  }
+  return hostMatches(origin, headerList);
+}
+
+function hostMatches(urlValue: string, headerList: Headers): boolean {
+  try {
+    const urlHost = new URL(urlValue).host;
+    const forwarded = headerList.get("x-forwarded-host");
+    const host = (forwarded ?? headerList.get("host") ?? "").split(",")[0]?.trim();
+    return Boolean(host) && urlHost === host;
+  } catch {
+    return false;
+  }
 }
 
 export function isAllowedOrigin(request: Request): boolean {
