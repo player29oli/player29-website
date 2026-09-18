@@ -40,6 +40,7 @@ test-results/
 
 # typescript
 *.tsbuildinfo
+next-env.d.ts
 
 # OS / editor
 .DS_Store

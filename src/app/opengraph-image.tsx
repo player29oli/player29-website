@@ -37,7 +37,7 @@ export default async function OpenGraphImage() {
             backgroundImage: "linear-gradient(90deg, #20B8F6 0%, #8C24F5 100%)",
           }}
         />
-        {/* eslint-disable-next-line @next/next/no-img-element */}
+        {/* Brand wordmark is a generated PNG; ImageResponse has no next/image. */}
         <img src={logoSrc} alt="" height={92} />
         <p
           style={{
