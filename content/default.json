@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-18T00:00:00.000Z",
+  "updatedAt": "2026-09-18T10:50:00.000Z",
   "site": {
     "name": "Player29",
     "legalName": "Player29 Ltd",
-    "tagline": "Digital products for sport, media and the screen.",
+    "tagline": "Digital products people come back for.",
     "title": "Player29 | Digital products for sport, media and the screen",
-    "description": "Player29 is a digital product company shaping and building engaging experiences across sport, media and connected TV.",
+    "description": "Player29 builds digital products for sport, media and the screen — things with a bit of Saturday in them, that people actually want to open again.",
     "email": "hello@player29.com",
     "linkedin": "https://www.linkedin.com/company/player29",
     "companyNumber": "",
@@ -14,12 +14,24 @@
   },
   "chrome": {
     "navigation": [
-      { "label": "Work", "href": "/#work" },
-      { "label": "Capabilities", "href": "/#capabilities" },
-      { "label": "About", "href": "/#about" }
+      {
+        "label": "Work",
+        "href": "/#work"
+      },
+      {
+        "label": "Capabilities",
+        "href": "/#capabilities"
+      },
+      {
+        "label": "About",
+        "href": "/#about"
+      }
     ],
-    "headerCta": { "label": "Start a conversation", "href": "/#contact" },
-    "footerBlurb": "A digital product company creating engaging experiences across sport, media and the screen.",
+    "headerCta": {
+      "label": "Let's talk",
+      "href": "/#contact"
+    },
+    "footerBlurb": "Digital products for sport, media and the screen — built with the energy of a big fixture, and made to be opened again.",
     "privacyLabel": "Privacy",
     "privacyHref": "/privacy",
     "copyrightPrefix": "©",
@@ -27,9 +39,9 @@
   },
   "notFound": {
     "kicker": "404",
-    "title": "This page is not here.",
-    "body": "The address may be mistyped, or the page may have moved. The homepage is the best place to start again.",
-    "ctaLabel": "Go to the homepage"
+    "title": "This page has gone missing.",
+    "body": "The address might be off, or the page may have moved. The homepage is a good place to pick up again.",
+    "ctaLabel": "Back to the homepage"
   },
   "privacy": {
     "kicker": "Player29",
@@ -88,10 +100,16 @@
       "type": "hero",
       "anchor": "",
       "kicker": "Player29",
-      "headline": "Digital products built for sport, media and the screen.",
-      "supporting": "We turn strong ideas and valuable IP into engaging digital experiences — from football products to connected-TV applications.",
-      "primaryCta": { "label": "Start a conversation", "href": "/#contact" },
-      "secondaryCta": { "label": "Explore what we do", "href": "/#capabilities" },
+      "headline": "Digital products people come back for.",
+      "supporting": "We build for sport, media and the screen. Strong ideas, turned into things you can play, watch and return to — with a bit of Saturday in them.",
+      "primaryCta": {
+        "label": "Let's talk",
+        "href": "/#contact"
+      },
+      "secondaryCta": {
+        "label": "See what we do",
+        "href": "/#capabilities"
+      },
       "imageSrc": "",
       "imageAlt": ""
     },
@@ -99,10 +117,10 @@
       "id": "intro",
       "type": "intro",
       "anchor": "",
-      "heading": "Strong ideas, made real.",
+      "heading": "Made to be opened again.",
       "paragraphs": [
-        "Player29 shapes and builds digital products at the intersection of sport, media and technology.",
-        "We combine product thinking, audience understanding and hands-on delivery to turn promising concepts into experiences people want to use."
+        "Player29 is a founder-led company that shapes and builds digital products for sport, media and the screen.",
+        "We get excited about the moment a product earns another look: a decision that actually matters, a match that could go either way, a reason to come back with your mates."
       ]
     },
     {
@@ -112,9 +130,9 @@
       "eyebrow": "Work",
       "name": "",
       "partner": "",
-      "status": "Football product — in development",
-      "description": "A compact football management experience designed around meaningful decisions, replayability and playing with friends.",
-      "role": "Product strategy, design and delivery",
+      "status": "Football management app — in development",
+      "description": "A compact football management game built around the calls that change a match — then replay it, argue about it, and play it with friends.",
+      "role": "Product, design and development",
       "screenshot": "",
       "screenshotAlt": "",
       "video": "",
@@ -124,12 +142,21 @@
       "frame": {
         "badge": "In development",
         "cards": [
-          { "title": "Decide", "lines": ["", ""] },
-          { "title": "Replay", "lines": ["", ""] },
-          { "title": "Play with friends", "lines": ["", ""] }
+          {
+            "title": "Decide",
+            "lines": ["", ""]
+          },
+          {
+            "title": "Replay",
+            "lines": ["", ""]
+          },
+          {
+            "title": "Play with friends",
+            "lines": ["", ""]
+          }
         ],
         "footerLabel": "Next decision",
-        "footerCopy": "A meaningful choice, not a menu of chores."
+        "footerCopy": "One call that swings the match. Not a to-do list in a kit."
       }
     },
     {
@@ -137,27 +164,27 @@
       "type": "capabilities",
       "anchor": "capabilities",
       "eyebrow": "Capabilities",
-      "heading": "What we bring to a product.",
+      "heading": "How we help an idea live.",
       "items": [
         {
           "number": "01",
-          "title": "Product strategy",
-          "copy": "Clarify the audience, opportunity, proposition and route to a viable product. Turn an open-ended concept into priorities, journeys, requirements and a practical plan."
+          "title": "Find the product",
+          "copy": "Who it is for, why it should exist, and what would make someone come back. We get that straight while the idea is still exciting — not after it has been flattened into a plan."
         },
         {
           "number": "02",
-          "title": "Digital product delivery",
-          "copy": "Shape and build focused applications with clear user journeys, considered interfaces and delivery appropriate to the stage of the product."
+          "title": "Make it real",
+          "copy": "We design and build focused applications: clear to use, good to look at, and honest about what they are. A first version you can put in someone’s hands."
         },
         {
           "number": "03",
-          "title": "Connected TV and media",
-          "copy": "Create screen-first experiences informed by television interfaces, remote interaction, content discovery and cross-platform constraints."
+          "title": "Mobile and Beyond",
+          "copy": "Phones first, then wherever the audience already is. We care about how it feels in the hand, on a bigger screen, and in the five minutes before something kicks off."
         },
         {
           "number": "04",
-          "title": "IP to digital product",
-          "copy": "Translate an existing brand, format or ruleset into a digital experience while understanding what should remain familiar and what needs to change."
+          "title": "Bring IP to life",
+          "copy": "A brand, a format, a set of rules people already love. We turn that into a digital product without sanding off what made it special."
         }
       ]
     },
@@ -166,27 +193,27 @@
       "type": "approach",
       "anchor": "approach",
       "eyebrow": "Approach",
-      "intro": "Good digital products begin by understanding what needs to be true for them to work.",
+      "intro": "The products people return to start with a simple question: what has to be true for this to matter?",
       "stages": [
         {
           "number": "01",
-          "title": "Understand the opportunity",
-          "copy": "Who it is for, why it should exist, and what would make it worth returning to."
+          "title": "Get under the skin of it",
+          "copy": "Who it is for, why now, and what would make it feel like a fixture in their week."
         },
         {
           "number": "02",
-          "title": "Shape the product",
-          "copy": "Priorities, journeys and an interface that can be built and tested without theatre."
+          "title": "Shape something you can feel",
+          "copy": "The few things that matter, a path through the product, and an interface we can actually build."
         },
         {
           "number": "03",
-          "title": "Build and learn",
-          "copy": "Ship a focused slice, see how people actually use it, and keep the scope honest."
+          "title": "Put it in people’s hands",
+          "copy": "A focused first slice, out in the world. Then we watch what people do — not what they nod at."
         },
         {
           "number": "04",
-          "title": "Improve with evidence",
-          "copy": "Change what the product is based on behaviour, not on a slide of next steps."
+          "title": "Keep making it better",
+          "copy": "Change the product because of how it is used. Not because the next slide said so."
         }
       ]
     },
@@ -195,11 +222,11 @@
       "type": "about",
       "anchor": "about",
       "eyebrow": "About",
-      "heading": "Founder-led by design.",
+      "heading": "Founder-led, on purpose.",
       "paragraphs": [
-        "Player29 is a founder-led digital product company created by product manager Oliver Kyte.",
-        "The company brings together product strategy, interface thinking and software delivery, bringing in trusted design, engineering and specialist expertise when a product requires it.",
-        "This keeps decisions close to the work while allowing each delivery team to grow responsibly around the needs of the product."
+        "Player29 was started by product manager Oliver Kyte to make digital products he would actually want to use.",
+        "Strategy, design and software sit together. When a product needs a specialist — in design, engineering, or something more particular — we bring in people we trust.",
+        "That keeps the important calls close to the making of the thing, and the team the right size for the product in front of us."
       ],
       "portraitSrc": "",
       "portraitAlt": "",
@@ -210,14 +237,17 @@
       "id": "closing",
       "type": "closing",
       "anchor": "contact",
-      "heading": "Have a strong idea, format or audience?",
-      "supporting": "Let's explore what it could become.",
+      "heading": "Got a strong idea, a format, or an audience that deserves better?",
+      "supporting": "Let’s see what it could become — and whether it has another season in it.",
       "emailLead": "Or write directly to",
       "backgroundImage": "/brand/player29-device-29.png",
-      "cta": { "label": "Start a conversation", "href": "/#contact" },
+      "cta": {
+        "label": "Let's talk",
+        "href": "/#contact"
+      },
       "contact": {
-        "heading": "Start a conversation",
-        "supporting": "Tell us a little about the idea, format or audience. A short note is enough.",
+        "heading": "Let's talk",
+        "supporting": "A few lines about the idea, the format or the audience is plenty.",
         "fields": {
           "name": "Name",
           "email": "Email",
@@ -226,7 +256,7 @@
         },
         "submit": "Send message",
         "sending": "Sending…",
-        "success": "Thanks — we will get back to you shortly.",
+        "success": "Thanks — we will be in touch shortly.",
         "error": "Something went wrong. Please email us instead.",
         "validation": {
           "nameRequired": "Please enter your name.",
