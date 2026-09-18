@@ -4,6 +4,7 @@ import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
 import { siteConfig } from "@/config/site";
 import { getSiteContent } from "@/lib/content/store";
+import { visibleSocials } from "@/lib/content/social";
 
 export default async function PublicLayout({
   children,
@@ -21,7 +22,7 @@ export default async function PublicLayout({
     email: content.site.email,
     description: content.site.description,
     logo: `${siteUrl}/brand/player29-icon-dark.png`,
-    sameAs: content.site.linkedin ? [content.site.linkedin] : [],
+    sameAs: visibleSocials(content.chrome.socials).map((item) => item.href),
   };
 
   return (

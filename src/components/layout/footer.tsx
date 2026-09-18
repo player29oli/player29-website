@@ -1,7 +1,13 @@
 import Link from "next/link";
 
 import { Logo } from "@/components/brand/logo";
+import { SocialIcon } from "@/components/brand/social-icon";
 import type { SiteContent } from "@/lib/content/schema";
+import {
+  detectSocialNetwork,
+  socialAccessibleName,
+  visibleSocials,
+} from "@/lib/content/social";
 
 export function Footer({ content }: { content: SiteContent }) {
   const year = new Date().getFullYear();
@@ -14,6 +20,7 @@ export function Footer({ content }: { content: SiteContent }) {
       ? `Registered office: ${content.site.registeredOffice}`
       : null,
   ].filter(Boolean);
+  const socials = visibleSocials(content.chrome.socials);
 
   return (
     <footer className="bg-ink text-white">
@@ -48,7 +55,7 @@ export function Footer({ content }: { content: SiteContent }) {
             </Link>
           ) : null}
         </nav>
-        <div className="flex flex-col gap-3 text-[15px] md:col-span-4">
+        <div className="flex flex-col gap-4 text-[15px] md:col-span-4">
           {content.site.email ? (
             <a
               href={`mailto:${content.site.email}`}
@@ -57,15 +64,29 @@ export function Footer({ content }: { content: SiteContent }) {
               {content.site.email}
             </a>
           ) : null}
-          {content.site.linkedin ? (
-            <a
-              href={content.site.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-white/70 hover:text-white"
+          {socials.length > 0 ? (
+            <ul
+              aria-label="Social links"
+              className="flex flex-wrap gap-2"
             >
-              {content.chrome.linkedinLabel}
-            </a>
+              {socials.map((item) => {
+                const name = socialAccessibleName(item.label, item.href);
+                const network = detectSocialNetwork(item.href);
+                return (
+                  <li key={`${item.href}-${name}`}>
+                    <a
+                      href={item.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex min-h-11 items-center gap-2 rounded-full border border-white/18 bg-white/8 px-3.5 text-sm font-semibold text-white/90 transition-colors hover:border-white/40 hover:bg-white/12 hover:text-white"
+                    >
+                      <SocialIcon network={network} />
+                      <span>{name}</span>
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
           ) : null}
         </div>
       </div>

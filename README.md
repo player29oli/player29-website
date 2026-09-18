@@ -55,7 +55,7 @@ src/
   app/api/admin        Image upload for the editor
   components/
     admin/             Editor UI
-    brand/             Logo lockups
+    brand/             Logo lockups and social icons
     layout/            Header, footer, skip link
     sections/          Homepage sections
     ui/                shadcn primitives
@@ -93,7 +93,20 @@ There is no hosted CMS. Oliver edits the live copy from a first-party editor.
 2. Set `ADMIN_EMAIL`, `ADMIN_PASSWORD` (8+ characters) and `AUTH_SECRET` (16+ characters).
 3. Restart `npm run dev`.
 4. Open **http://127.0.0.1:43129/login** — this address is not linked from the homepage, header, footer or sitemap.
-5. After sign-in you land on `/admin`. Change wording, replace images, and add / remove / reorder homepage sections, then **Save changes**.
+5. After sign-in you land on `/admin`. Change wording, replace images, add / remove / reorder homepage sections, and edit footer details and social links, then **Save changes**.
+
+The **Footer** tab edits:
+
+- Company name (legal name)
+- Footer description
+- Public email
+- Company number
+- Registered office
+- Copyright prefix
+- Privacy link label and URL
+- Social links (label + URL) — add, remove and reorder
+
+Public pages only show a social when it has a real URL. LinkedIn, Instagram, X/Twitter, YouTube, TikTok, Facebook and GitHub get a matching icon; anything else uses a generic link icon. Empty or placeholder URLs stay hidden. Do not add profiles that are not live.
 
 The session is an httpOnly cookie (12 hours), SameSite=Lax. Login is CSRF-checked and rate-limited (8 attempts per 15 minutes per IP, in memory). Sign out from the editor.
 

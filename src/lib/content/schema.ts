@@ -216,6 +216,7 @@ export type SiteContent = {
     privacyHref: string;
     copyrightPrefix: string;
     linkedinLabel: string;
+    socials: LinkField[];
   };
   notFound: {
     kicker: string;
@@ -524,6 +525,24 @@ export function parseSiteContent(value: unknown): SiteContent | null {
     .map((section, index) => parseSection(section, index))
     .filter((section): section is HomepageSection => section !== null);
 
+  const socialsRaw = Array.isArray(chromeRaw.socials) ? chromeRaw.socials : null;
+  let socials = (socialsRaw ?? [])
+    .slice(0, MAX_LIST_ITEMS)
+    .map((item) => asLink(item, emptyLink));
+  if (socialsRaw === null) {
+    const inherited = asHref(siteRaw.linkedin);
+    if (inherited) {
+      socials = [
+        {
+          label: asShort(chromeRaw.linkedinLabel, "LinkedIn"),
+          href: inherited,
+        },
+      ];
+    }
+  }
+  const linkedinFromSocials =
+    socials.find((item) => /linkedin\.com/i.test(item.href))?.href ?? "";
+
   return {
     version: CONTENT_VERSION,
     updatedAt: asString(value.updatedAt, new Date().toISOString()),
@@ -534,7 +553,7 @@ export function parseSiteContent(value: unknown): SiteContent | null {
       title: asString(siteRaw.title),
       description: asString(siteRaw.description),
       email: asShort(siteRaw.email),
-      linkedin: asHref(siteRaw.linkedin),
+      linkedin: linkedinFromSocials || asHref(siteRaw.linkedin),
       companyNumber: asShort(siteRaw.companyNumber),
       registeredOffice: asString(siteRaw.registeredOffice),
     },
@@ -546,6 +565,7 @@ export function parseSiteContent(value: unknown): SiteContent | null {
       privacyHref: asHref(chromeRaw.privacyHref, "/privacy"),
       copyrightPrefix: asShort(chromeRaw.copyrightPrefix, "©"),
       linkedinLabel: asShort(chromeRaw.linkedinLabel, "LinkedIn"),
+      socials,
     },
     notFound: {
       kicker: asShort(notFoundRaw.kicker, "404"),

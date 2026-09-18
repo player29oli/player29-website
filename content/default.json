@@ -35,7 +35,13 @@
     "privacyLabel": "Privacy",
     "privacyHref": "/privacy",
     "copyrightPrefix": "©",
-    "linkedinLabel": "LinkedIn"
+    "linkedinLabel": "LinkedIn",
+    "socials": [
+      {
+        "label": "LinkedIn",
+        "href": "https://www.linkedin.com/company/player29"
+      }
+    ]
   },
   "notFound": {
     "kicker": "404",

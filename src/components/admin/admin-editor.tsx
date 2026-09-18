@@ -5,8 +5,14 @@ import Link from "next/link";
 
 import { AdminFields } from "@/components/admin/admin-fields";
 import { Logo } from "@/components/brand/logo";
+import { SocialIcon } from "@/components/brand/social-icon";
 import { Button } from "@/components/ui/button";
 import { logoutAction, saveContentAction } from "@/lib/auth/actions";
+import {
+  detectSocialNetwork,
+  NETWORK_LABELS,
+  socialAccessibleName,
+} from "@/lib/content/social";
 import {
   createSection,
   SECTION_LABELS,
@@ -18,7 +24,7 @@ import {
 } from "@/lib/content/schema";
 import { cn } from "@/lib/utils";
 
-type Tab = "homepage" | "chrome" | "site" | "privacy" | "notFound";
+type Tab = "homepage" | "chrome" | "footer" | "site" | "privacy" | "notFound";
 
 type AdminEditorProps = {
   initialContent: SiteContent;
@@ -31,6 +37,7 @@ type AdminEditorProps = {
 const TABS: { id: Tab; label: string }[] = [
   { id: "homepage", label: "Homepage" },
   { id: "chrome", label: "Navigation" },
+  { id: "footer", label: "Footer" },
   { id: "site", label: "Site details" },
   { id: "privacy", label: "Privacy" },
   { id: "notFound", label: "404 page" },
@@ -193,6 +200,10 @@ export function AdminEditor({
               onChange={update}
               csrfToken={csrfToken}
             />
+          ) : null}
+
+          {tab === "footer" ? (
+            <FooterPanel content={content} onChange={update} />
           ) : null}
 
           {tab === "site" ? (
@@ -360,7 +371,7 @@ function ChromePanel({
 
   return (
     <div className="rounded-[18px] border border-ink/8 bg-white p-5 md:p-6">
-      <h2 className="font-display mb-6 text-xl font-semibold">Header, navigation and footer</h2>
+      <h2 className="font-display mb-6 text-xl font-semibold">Header and navigation</h2>
       <div className="grid gap-6">
         <AdminFields.Text
           id="header-cta-label"
@@ -382,46 +393,6 @@ function ChromePanel({
               ...content,
               chrome: { ...content.chrome, headerCta: { ...content.chrome.headerCta, href: value } },
             })
-          }
-        />
-        <AdminFields.Textarea
-          id="footer-blurb"
-          label="Footer description"
-          value={content.chrome.footerBlurb}
-          onChange={(value) =>
-            onChange({ ...content, chrome: { ...content.chrome, footerBlurb: value } })
-          }
-        />
-        <AdminFields.Text
-          id="privacy-label"
-          label="Privacy link label"
-          value={content.chrome.privacyLabel}
-          onChange={(value) =>
-            onChange({ ...content, chrome: { ...content.chrome, privacyLabel: value } })
-          }
-        />
-        <AdminFields.Text
-          id="privacy-href"
-          label="Privacy link"
-          value={content.chrome.privacyHref}
-          onChange={(value) =>
-            onChange({ ...content, chrome: { ...content.chrome, privacyHref: value } })
-          }
-        />
-        <AdminFields.Text
-          id="linkedin-label"
-          label="LinkedIn label"
-          value={content.chrome.linkedinLabel}
-          onChange={(value) =>
-            onChange({ ...content, chrome: { ...content.chrome, linkedinLabel: value } })
-          }
-        />
-        <AdminFields.Text
-          id="copyright-prefix"
-          label="Copyright prefix"
-          value={content.chrome.copyrightPrefix}
-          onChange={(value) =>
-            onChange({ ...content, chrome: { ...content.chrome, copyrightPrefix: value } })
           }
         />
         <div>
@@ -477,6 +448,210 @@ function ChromePanel({
   );
 }
 
+function FooterPanel({
+  content,
+  onChange,
+}: {
+  content: SiteContent;
+  onChange: (next: SiteContent) => void;
+}) {
+  const socials = content.chrome.socials;
+
+  function setChrome<K extends keyof SiteContent["chrome"]>(
+    key: K,
+    value: SiteContent["chrome"][K],
+  ) {
+    onChange({ ...content, chrome: { ...content.chrome, [key]: value } });
+  }
+
+  function setSite<K extends keyof SiteContent["site"]>(
+    key: K,
+    value: SiteContent["site"][K],
+  ) {
+    onChange({ ...content, site: { ...content.site, [key]: value } });
+  }
+
+  function setSocials(next: typeof socials) {
+    const linkedin =
+      next.find((item) => /linkedin\.com/i.test(item.href))?.href ?? "";
+    onChange({
+      ...content,
+      site: { ...content.site, linkedin },
+      chrome: { ...content.chrome, socials: next },
+    });
+  }
+
+  return (
+    <div className="rounded-[18px] border border-ink/8 bg-white p-5 md:p-6">
+      <h2 className="font-display mb-2 text-xl font-semibold">Footer</h2>
+      <p className="text-muted-text mb-6 text-sm">
+        Company details and social links shown at the bottom of public pages.
+        Socials without a URL stay hidden on the live site.
+      </p>
+      <div className="grid gap-6">
+        <AdminFields.Text
+          id="footer-legal-name"
+          label="Company name"
+          value={content.site.legalName}
+          onChange={(value) => setSite("legalName", value)}
+        />
+        <AdminFields.Textarea
+          id="footer-blurb"
+          label="Footer description"
+          value={content.chrome.footerBlurb}
+          onChange={(value) => setChrome("footerBlurb", value)}
+        />
+        <AdminFields.Text
+          id="footer-email"
+          label="Public email"
+          value={content.site.email}
+          onChange={(value) => setSite("email", value)}
+        />
+        <AdminFields.Text
+          id="footer-company-number"
+          label="Company number"
+          value={content.site.companyNumber}
+          onChange={(value) => setSite("companyNumber", value)}
+        />
+        <AdminFields.Textarea
+          id="footer-office"
+          label="Registered office"
+          value={content.site.registeredOffice}
+          onChange={(value) => setSite("registeredOffice", value)}
+        />
+        <AdminFields.Text
+          id="footer-copyright"
+          label="Copyright prefix"
+          value={content.chrome.copyrightPrefix}
+          onChange={(value) => setChrome("copyrightPrefix", value)}
+        />
+        <AdminFields.Text
+          id="footer-privacy-label"
+          label="Privacy link label"
+          value={content.chrome.privacyLabel}
+          onChange={(value) => setChrome("privacyLabel", value)}
+        />
+        <AdminFields.Text
+          id="footer-privacy-href"
+          label="Privacy link"
+          value={content.chrome.privacyHref}
+          onChange={(value) => setChrome("privacyHref", value)}
+        />
+        <div>
+          <p className="mb-3 text-sm font-medium">Social links</p>
+          <p className="text-muted-text mb-4 text-sm">
+            Add a label and URL. LinkedIn, Instagram, X, YouTube, TikTok,
+            Facebook and GitHub get a matching icon. Anything else uses a
+            generic link icon. Do not add profiles that are not live.
+          </p>
+          <div className="grid gap-4">
+            {socials.length === 0 ? (
+              <p className="text-muted-text text-sm">No social links yet.</p>
+            ) : (
+              socials.map((item, index) => (
+                <div
+                  key={`social-${index}`}
+                  className="grid gap-3 rounded-[16px] bg-surface/70 p-4"
+                >
+                  <div className="grid gap-3 md:grid-cols-2">
+                    <AdminFields.Text
+                      id={`social-label-${index}`}
+                      label="Label"
+                      value={item.label}
+                      onChange={(value) => {
+                        const next = [...socials];
+                        next[index] = { ...item, label: value };
+                        setSocials(next);
+                      }}
+                    />
+                    <AdminFields.Text
+                      id={`social-href-${index}`}
+                      label="URL"
+                      value={item.href}
+                      onChange={(value) => {
+                        const next = [...socials];
+                        next[index] = { ...item, href: value };
+                        setSocials(next);
+                      }}
+                    />
+                  </div>
+                  {item.href.trim() ? (
+                    <p className="flex items-center gap-2 text-sm text-muted-text">
+                      <span className="inline-flex min-h-11 items-center gap-2 rounded-full border border-ink/10 bg-white px-3.5 text-sm font-semibold text-ink">
+                        <SocialIcon network={detectSocialNetwork(item.href)} />
+                        <span>{socialAccessibleName(item.label, item.href)}</span>
+                      </span>
+                      <span>
+                        Icon: {NETWORK_LABELS[detectSocialNetwork(item.href)]}
+                      </span>
+                    </p>
+                  ) : (
+                    <p className="text-muted-text text-sm">
+                      Hidden on the public site until a URL is added.
+                    </p>
+                  )}
+                  <div className="flex flex-wrap gap-2">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="cta"
+                      onClick={() => {
+                        if (index === 0) return;
+                        const next = [...socials];
+                        const [moved] = next.splice(index, 1);
+                        next.splice(index - 1, 0, moved);
+                        setSocials(next);
+                      }}
+                      disabled={index === 0}
+                    >
+                      Move up
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="cta"
+                      onClick={() => {
+                        if (index >= socials.length - 1) return;
+                        const next = [...socials];
+                        const [moved] = next.splice(index, 1);
+                        next.splice(index + 1, 0, moved);
+                        setSocials(next);
+                      }}
+                      disabled={index >= socials.length - 1}
+                    >
+                      Move down
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="cta"
+                      onClick={() =>
+                        setSocials(socials.filter((_, itemIndex) => itemIndex !== index))
+                      }
+                    >
+                      Remove
+                    </Button>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+          <Button
+            type="button"
+            variant="outline"
+            size="cta"
+            className="mt-4"
+            onClick={() => setSocials([...socials, { label: "", href: "" }])}
+            disabled={socials.length >= 16}
+          >
+            Add social link
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function SitePanel({
   content,
   onChange,
@@ -497,7 +672,6 @@ function SitePanel({
         <AdminFields.Text id="title" label="Browser title" value={content.site.title} onChange={(value) => setSite("title", value)} />
         <AdminFields.Textarea id="description" label="Meta description" value={content.site.description} onChange={(value) => setSite("description", value)} />
         <AdminFields.Text id="email" label="Public email" value={content.site.email} onChange={(value) => setSite("email", value)} />
-        <AdminFields.Text id="linkedin" label="LinkedIn URL" value={content.site.linkedin} onChange={(value) => setSite("linkedin", value)} />
         <AdminFields.Text id="company-number" label="Company number" value={content.site.companyNumber} onChange={(value) => setSite("companyNumber", value)} />
         <AdminFields.Textarea id="registered-office" label="Registered office" value={content.site.registeredOffice} onChange={(value) => setSite("registeredOffice", value)} />
       </div>
