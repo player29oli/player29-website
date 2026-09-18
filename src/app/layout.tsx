@@ -7,6 +7,7 @@ import { SkipLink } from "@/components/layout/skip-link";
 import { siteConfig } from "@/config/site";
 
 import "./globals.css";
+import "@/styles/motion.css";
 
 const inter = Inter({
   subsets: ["latin"],
