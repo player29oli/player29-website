@@ -7,14 +7,14 @@ const wordmarks = {
   light: {
     src: "/brand/player29-wordmark-light-badge.png",
     alt: "Player29",
-    width: 1662,
-    height: 525,
+    width: 1580,
+    height: 438,
   },
   dark: {
     src: "/brand/player29-wordmark-dark.png",
     alt: "Player29",
-    width: 1586,
-    height: 497,
+    width: 1500,
+    height: 409,
   },
 } as const;
 
@@ -69,8 +69,8 @@ function Mark({
       className={cn(
         "col-start-1 row-start-1",
         compact ? "h-8 w-auto md:h-9" : "h-7 w-auto md:h-8",
+        !compact && (variant === "dark" ? "mix-blend-lighten" : "mix-blend-multiply"),
         hidden && "pointer-events-none opacity-0",
-        "transition-opacity duration-200 motion-reduce:transition-none",
         className,
       )}
     />

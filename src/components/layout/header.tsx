@@ -61,22 +61,17 @@ export function Header({
       ref={headerRef}
       data-over-dark={overDark ? "true" : "false"}
       className={cn(
-        "sticky top-0 z-50 border-b backdrop-blur-[8px] motion-reduce:transition-none",
+        "sticky top-0 z-50 isolate border-b motion-reduce:transition-none",
         "transition-[background-color,border-color,box-shadow] duration-200",
         overDark
-          ? "border-white/12 bg-ink/92 text-white"
+          ? "border-white/12 bg-ink text-white"
           : scrolled
-            ? "border-ink/10 bg-white/88 text-ink shadow-[0_1px_0_rgba(17,19,24,0.04)]"
-            : "border-transparent bg-white/88 text-ink",
+            ? "border-ink/10 bg-white text-ink shadow-[0_1px_0_rgba(17,19,24,0.04)]"
+            : "border-transparent bg-white text-ink",
       )}
     >
       <div className="container-site flex h-16 items-center justify-between gap-4 md:h-[4.5rem]">
-        <span className="md:hidden">
-          <Logo variant={overDark ? "dark" : "light"} compact stacked priority />
-        </span>
-        <span className="hidden md:inline-flex">
-          <Logo variant={overDark ? "dark" : "light"} stacked priority />
-        </span>
+        <Logo variant={overDark ? "dark" : "light"} stacked priority />
 
         <nav aria-label="Primary" className="hidden items-center gap-8 lg:flex">
           {navigation.map((item) => (

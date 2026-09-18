@@ -11,6 +11,6 @@ export default function LoginLayout({
   children: ReactNode;
 }) {
   return (
-    <div className="flex min-h-full flex-1 flex-col bg-surface">{children}</div>
+    <div className="isolate flex min-h-full flex-1 flex-col bg-surface">{children}</div>
   );
 }

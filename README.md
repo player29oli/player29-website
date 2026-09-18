@@ -154,15 +154,15 @@ Fill those fields when material is approved. Do not invent metrics, testimonials
 
 ## Logo and assets
 
-Brand files live in `public/brand/`. Compact P29 app marks are used for the favicon, Apple touch icon and the mobile header. Full wordmarks are used in the desktop header (light, with 29 badge) and footer (dark).
+Brand files live in `public/brand/`. Compact P29 app marks are used for the favicon, Apple touch icon and the mobile menu. Full wordmarks are used in the header (light or dark, with mix-blend knockout) and footer (dark).
 
 Uncropped supplied files are kept in `public/brand/originals/`. Live files in `public/brand/` are the same artwork with **empty canvas cropped only** so they scale at header height. Do not redraw the wordmark in CSS or approximate it with a font.
 
 ### Limitations of the supplied files
 
-- Wordmarks (`player29-wordmark-light.png`, `player29-wordmark-light-badge.png`, `player29-wordmark-dark.png`) are **opaque RGB canvases** (white or near-black), not transparent. They are placed on matching surfaces: light marks on the white header, the dark mark on the ink footer and Open Graph image. Do **not** run automatic background removal.
+- Wordmarks (`player29-wordmark-light.png`, `player29-wordmark-light-badge.png`, `player29-wordmark-dark.png`) are **opaque RGB canvases** (white or near-black), not transparent. Live CSS knocks the canvas out with `mix-blend-mode: multiply` on light surfaces and `mix-blend-mode: lighten` on dark surfaces, inside an `isolate` header/footer so the blend does not pick up the page behind. Do **not** run automatic background removal or a flood-fill — that fringes the 29 gradient.
 - Compact icons are rounded-square app icons. They include a pale or black fill; that fill is part of the artwork. Outer empty canvas was cropped; no alpha was invented.
-- Because the wordmarks are not transparent, they will show a rectangular plate if placed on a mismatched colour (for example a light wordmark on a photograph). Export transparent masters from source if you need them on mixed backgrounds.
+- Because the wordmarks are not transparent, they will show a rectangular plate if placed on a mismatched colour without the blend knockout (for example a light wordmark on a photograph). Export transparent masters from source if you need them on mixed photographic backgrounds.
 - The decorative 29 in the hero and closing section is a crop of the 29 badge from the supplied dark wordmark, still on its dark canvas, used only on dark surfaces.
 
 ## Important IP and content restrictions
