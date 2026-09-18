@@ -7,14 +7,14 @@ const wordmarks = {
   light: {
     src: "/brand/player29-wordmark-light-badge.png",
     alt: "Player29",
-    width: 1195,
-    height: 260,
+    width: 1662,
+    height: 525,
   },
   dark: {
     src: "/brand/player29-wordmark-dark.png",
     alt: "Player29",
-    width: 1195,
-    height: 260,
+    width: 1586,
+    height: 497,
   },
 } as const;
 
@@ -22,14 +22,14 @@ const marks = {
   light: {
     src: "/brand/player29-icon-light.png",
     alt: "Player29",
-    width: 589,
-    height: 338,
+    width: 1102,
+    height: 1088,
   },
   dark: {
     src: "/brand/player29-icon-dark.png",
     alt: "Player29",
-    width: 589,
-    height: 338,
+    width: 1062,
+    height: 1062,
   },
 } as const;
 

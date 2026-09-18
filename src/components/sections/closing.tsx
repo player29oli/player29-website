@@ -14,8 +14,8 @@ export function Closing() {
       <Image
         src="/brand/player29-device-29.png"
         alt=""
-        width={925}
-        height={563}
+        width={543}
+        height={400}
         className="pointer-events-none absolute -right-16 -bottom-16 w-[min(28rem,55%)] opacity-25"
       />
       <div className="container-site relative grid gap-12 md:grid-cols-12 md:gap-10">

@@ -7,7 +7,7 @@ function ProductFrame() {
       className="bg-charcoal overflow-hidden rounded-[22px] p-4 shadow-[0_24px_80px_rgba(17,19,24,0.16)] md:p-6"
     >
       <div className="mb-5 flex items-center justify-between">
-        <span className="text-sm font-semibold text-white/80">Matchday</span>
+        <span className="h-2 w-16 rounded-full bg-white/20" />
         <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-semibold text-white/70">
           In development
         </span>

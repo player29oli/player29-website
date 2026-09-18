@@ -1,11 +1,12 @@
-# Player29 brand assets
-#
-# Original supplied artwork was not available on the build environment
-# (coordinator copied files to a local path that did not sync to this worker).
-# The PNG files in this folder are reconstructions from the written brand
-# specification: Sora ExtraBold wordmark, cyan-to-violet 29 device, ink #111318.
-#
-# Replace these with the supplied originals before a public launch.
-#
-# originals/  — reconstructed source canvases (preserve)
-# Web-ready transparent versions live one directory up in /public/brand/
+# Player29 supplied originals
+
+These are Oliver’s supplied PNG files, preserved unchanged.
+
+- player29-icon-light.png — compact P29 on a pale rounded square
+- player29-icon-dark.png — compact P29 (white P, cyan-to-violet 29) on a dark rounded square
+- player29-wordmark-light.png — black Player29 wordmark on an opaque white canvas
+- player29-wordmark-dark.png — white Player + 29 badge on an opaque dark canvas
+- player29-wordmark-light-badge.png — black Player + 29 badge on an opaque white canvas
+
+Wordmarks are RGB (no transparency). Do not auto-remove backgrounds.
+Live files one directory up are the same artwork with empty canvas cropped only.

@@ -28,8 +28,8 @@ export function HeroVisual() {
         <Image
           src="/brand/player29-device-29.png"
           alt=""
-          width={925}
-          height={563}
+          width={543}
+          height={400}
           className="pointer-events-none absolute -right-8 -bottom-10 w-[72%] rotate-[-8deg] opacity-90"
         />
       </div>

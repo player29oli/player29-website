@@ -37,7 +37,7 @@ export default async function OpenGraphImage() {
             backgroundImage: "linear-gradient(90deg, #20B8F6 0%, #8C24F5 100%)",
           }}
         />
-        {/* Brand wordmark is a generated PNG; ImageResponse has no next/image. */}
+        {/* Supplied dark wordmark (opaque canvas) on a matching ink background. */}
         <img src={logoSrc} alt="" height={92} />
         <p
           style={{
