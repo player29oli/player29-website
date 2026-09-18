@@ -10,7 +10,6 @@ import { hero, navigation } from "@/data/content";
 import { cn } from "@/lib/utils";
 
 export function Header() {
-  const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -58,7 +57,7 @@ export function Header() {
           </Link>
         </div>
 
-        <MobileNav open={open} onOpenChange={setOpen} />
+        <MobileNav />
       </div>
     </header>
   );
