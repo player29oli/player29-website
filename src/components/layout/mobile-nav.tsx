@@ -7,6 +7,7 @@ import { Menu, X } from "lucide-react";
 
 import { Logo } from "@/components/brand/logo";
 import { buttonVariants } from "@/components/ui/button";
+import { trackContactClick } from "@/lib/analytics/gtag";
 import type { LinkField } from "@/lib/content/schema";
 import { cn } from "@/lib/utils";
 
@@ -88,7 +89,10 @@ export function MobileNav({
                       buttonVariants({ size: "cta" }),
                       "mt-3 justify-center",
                     )}
-                    onClick={() => setOpen(false)}
+                    onClick={() => {
+                      trackContactClick("header");
+                      setOpen(false);
+                    }}
                   >
                     {cta.label}
                   </Link>

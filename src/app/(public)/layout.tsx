@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 
+import { AnalyticsConsent } from "@/components/analytics/analytics-consent";
 import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
 import { siteConfig } from "@/config/site";
@@ -41,6 +42,7 @@ export default async function PublicLayout({
       />
       {children}
       <Footer content={content} />
+      <AnalyticsConsent />
     </>
   );
 }

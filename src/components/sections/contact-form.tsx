@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { trackContactSubmit } from "@/lib/analytics/gtag";
 import type { ClosingSection } from "@/lib/content/schema";
 
 type Status = "idle" | "submitting" | "success" | "error";
@@ -54,6 +55,7 @@ export function ContactForm({
       const body = encodeURIComponent(
         `${message}\n\n${senderName}${organisation ? `\n${organisation}` : ""}\n${senderEmail}`,
       );
+      trackContactSubmit("form");
       window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
       setStatus("success");
       form.reset();
@@ -67,6 +69,7 @@ export function ContactForm({
         body: JSON.stringify(payload),
       });
       if (!response.ok) throw new Error("Request failed");
+      trackContactSubmit("form");
       setStatus("success");
       form.reset();
     } catch {

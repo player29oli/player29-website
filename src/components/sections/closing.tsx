@@ -1,5 +1,6 @@
 import Image from "next/image";
 
+import { ContactTrackedLink } from "@/components/analytics/contact-tracked-link";
 import { ContactForm } from "@/components/sections/contact-form";
 import { siteConfig } from "@/config/site";
 import type { ClosingSection } from "@/lib/content/schema";
@@ -54,12 +55,13 @@ export function Closing({
           {email ? (
             <p className="mt-8 text-sm text-white/55">
               {section.emailLead}{" "}
-              <a
+              <ContactTrackedLink
                 className="font-semibold text-white underline-offset-4 hover:underline"
                 href={`mailto:${email}`}
+                location="closing"
               >
                 {email}
-              </a>
+              </ContactTrackedLink>
               .
             </p>
           ) : null}

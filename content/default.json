@@ -64,14 +64,24 @@
       {
         "heading": "What this site collects",
         "paragraphs": [
-          "The public pages do not use advertising trackers, analytics cookies or unnecessary cookies. We do not implement Google Analytics.",
+          "The public pages do not use advertising trackers. We do not run Google Tag Manager, ads, or advertising cookies.",
           "If you send a message through the contact form or email, we receive the name, email address, organisation (if you provide one) and message that you submit, so that we can reply. We do not sell this information."
         ]
       },
       {
         "heading": "Cookies",
         "paragraphs": [
-          "This version of the site does not set advertising or analytics cookies. Hosting providers such as Vercel may process technical logs (for example IP address, browser and request time) to operate and secure the service. If we later add privacy-conscious analytics, this page will be updated before those tools are switched on."
+          "We remember your analytics choice in a first-party cookie named p29_analytics (and in local storage where the browser allows it). That cookie only stores granted or denied so we can honour your choice on later visits. It is not an advertising cookie.",
+          "If you accept analytics, Google Analytics 4 may set first-party cookies such as _ga and _ga_*. Those cookies are not set unless you accept. If you reject, we do not load Google Analytics and we do not set those cookies.",
+          "Hosting providers such as Vercel may process technical logs (for example IP address, browser and request time) to operate and secure the service. Those logs are not analytics cookies we set in your browser."
+        ]
+      },
+      {
+        "heading": "Analytics",
+        "paragraphs": [
+          "If you accept, we use Google Analytics 4 on the public pages only (not on /login or /admin). Google Ireland Limited and Google LLC process that information on our behalf as a processor. The script we load is Google’s gtag library, not Google Tag Manager.",
+          "Typical information includes which pages are viewed, a rough geographic region, and device or browser type. If you accept, we also send named events when you use a contact control (header, hero, closing or footer) or successfully submit the contact form. Those events include a location label, not the contents of your message. We keep advertising storage, ad user data and ad personalisation denied. We do not use this for ads.",
+          "Google Analytics runs only after you press Accept analytics. Reject leaves it off. You can change your mind later from Analytics cookies in the footer. This page has not received legal review and is not legal advice."
         ]
       },
       {

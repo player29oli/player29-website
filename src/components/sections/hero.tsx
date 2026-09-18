@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { ContactTrackedLink } from "@/components/analytics/contact-tracked-link";
 import { ContentImage } from "@/components/content-image";
 import { HeroVisual } from "@/components/sections/hero-visual";
 import { buttonVariants } from "@/components/ui/button";
@@ -34,12 +35,13 @@ export function Hero({ section }: { section: HeroSection }) {
           ) : null}
           <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
             {section.primaryCta.label ? (
-              <Link
+              <ContactTrackedLink
                 href={section.primaryCta.href || "/#contact"}
+                location="hero"
                 className={cn(buttonVariants({ size: "cta" }), "justify-center")}
               >
                 {section.primaryCta.label}
-              </Link>
+              </ContactTrackedLink>
             ) : null}
             {section.secondaryCta.label ? (
               <Link

@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import { AnalyticsSettingsLink } from "@/components/analytics/analytics-consent";
+import { ContactTrackedLink } from "@/components/analytics/contact-tracked-link";
 import { Logo } from "@/components/brand/logo";
 import { SocialIcon } from "@/components/brand/social-icon";
 import type { SiteContent } from "@/lib/content/schema";
@@ -54,15 +56,17 @@ export function Footer({ content }: { content: SiteContent }) {
               {content.chrome.privacyLabel}
             </Link>
           ) : null}
+          <AnalyticsSettingsLink />
         </nav>
         <div className="flex flex-col gap-4 text-[15px] md:col-span-4">
           {content.site.email ? (
-            <a
+            <ContactTrackedLink
               href={`mailto:${content.site.email}`}
+              location="footer"
               className="font-semibold text-white/90 hover:text-white"
             >
               {content.site.email}
-            </a>
+            </ContactTrackedLink>
           ) : null}
           {socials.length > 0 ? (
             <ul

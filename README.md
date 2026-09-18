@@ -78,6 +78,7 @@ public/uploads/        Local image uploads from the editor
 | `ADMIN_PASSWORD` | Founder password. At least 8 characters. |
 | `AUTH_SECRET` | HMAC secret for the session cookie. At least 16 characters. `openssl rand -base64 32` |
 | `BLOB_READ_WRITE_TOKEN` | Vercel Blob token. Required on Vercel so edits persist across deploys. Locally, omit this and edits go to `.data/content.json`. |
+| `NEXT_PUBLIC_GA_MEASUREMENT_ID` | Optional GA4 measurement ID (for example `G-35HZZTXPRM`). Empty means no analytics. The public site asks before loading gtag. Do not set this on `/login` specially — gtag is only mounted on public pages. |
 
 Never commit `.env` or `.env.local`. `.env.example` is safe to commit.
 
@@ -190,7 +191,8 @@ Do not commit secrets.
 3. Set `NEXT_PUBLIC_SITE_URL` to the Vercel URL (for example `https://player29.vercel.app` — that exact subdomain may already be taken).
 4. Optionally set `NEXT_PUBLIC_CONTACT_FORM_ENDPOINT`.
 5. For the content editor on Vercel: create a Blob store in the project, then set `BLOB_READ_WRITE_TOKEN`, `ADMIN_EMAIL`, `ADMIN_PASSWORD` and `AUTH_SECRET`. Without the Blob token, Save fails with a clear error — it will not write to ephemeral disk and pretend to succeed.
-6. Deploy. Preview deployments are created automatically for pull requests. Production tracks `main`.
+6. For Google Analytics 4, set `NEXT_PUBLIC_GA_MEASUREMENT_ID=G-35HZZTXPRM` on production and redeploy. Leave it empty to keep analytics off. gtag loads on public pages only, and only after Accept analytics. After consent we also send `contact_click` and `contact_submit` events with a `location` parameter.
+7. Deploy. Preview deployments are created automatically for pull requests. Production tracks `main`.
 
 The first deploy can use the free Vercel URL. HTTPS is automatic.
 

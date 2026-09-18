@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 
+import { ContactTrackedLink } from "@/components/analytics/contact-tracked-link";
 import { Logo } from "@/components/brand/logo";
 import { MobileNav } from "@/components/layout/mobile-nav";
 import { buttonVariants } from "@/components/ui/button";
@@ -92,8 +93,9 @@ export function Header({
 
         <div className="hidden lg:block">
           {cta.label ? (
-            <Link
+            <ContactTrackedLink
               href={cta.href || "/#contact"}
+              location="header"
               className={cn(
                 buttonVariants({ size: "cta" }),
                 overDark &&
@@ -101,7 +103,7 @@ export function Header({
               )}
             >
               {cta.label}
-            </Link>
+            </ContactTrackedLink>
           ) : null}
         </div>
 
