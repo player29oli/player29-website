@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { AdminEditor } from "@/components/admin/admin-editor";
 import { isAdminConfigured } from "@/lib/auth/config";
 import { issueCsrfToken, getSession } from "@/lib/auth/session";
-import { getActiveStoreKind, readSiteContent } from "@/lib/content/store";
+import { getActiveStoreKind, getPersistWarning, readSiteContent } from "@/lib/content/store";
 
 export const metadata: Metadata = {
   title: { absolute: "Edit site" },
@@ -29,6 +29,7 @@ export default async function AdminPage() {
       editorEmail={session.email}
       persistTo={persistTo}
       loadedFrom={source}
+      persistWarning={getPersistWarning()}
     />
   );
 }

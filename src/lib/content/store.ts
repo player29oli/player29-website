@@ -3,7 +3,7 @@ import "server-only";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 
-import { unstable_noStore as noStore } from "next/cache";
+import { connection } from "next/server";
 
 import defaultJson from "../../../content/default.json";
 import {
@@ -12,9 +12,18 @@ import {
   type SiteContent,
 } from "@/lib/content/schema";
 
+export const CONTENT_CACHE_TAG = "player29-content";
+
 const LOCAL_DIR = path.join(process.cwd(), ".data");
 const LOCAL_FILE = path.join(LOCAL_DIR, "content.json");
 const BLOB_PATHNAME = "player29/content.json";
+
+export class ContentPersistError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "ContentPersistError";
+  }
+}
 
 export type ContentReadResult = {
   content: SiteContent;
@@ -31,6 +40,17 @@ function defaultContent(): SiteContent {
 
 function blobConfigured(): boolean {
   return Boolean(process.env.BLOB_READ_WRITE_TOKEN);
+}
+
+function onVercel(): boolean {
+  return Boolean(process.env.VERCEL);
+}
+
+export function getPersistWarning(): string | null {
+  if (onVercel() && !blobConfigured()) {
+    return "This deployment cannot save content because BLOB_READ_WRITE_TOKEN is not set. Add a Vercel Blob store token in the project environment, then try again.";
+  }
+  return null;
 }
 
 async function readBlob(): Promise<unknown | null> {
@@ -88,7 +108,7 @@ export async function getSiteContent(): Promise<SiteContent> {
 }
 
 export async function readSiteContent(): Promise<ContentReadResult> {
-  noStore();
+  await connection();
 
   if (blobConfigured()) {
     try {
@@ -97,6 +117,9 @@ export async function readSiteContent(): Promise<ContentReadResult> {
       if (parsed) return { content: parsed, source: "blob" };
     } catch (error) {
       console.error("Failed to read content from Vercel Blob; using fallback.", error);
+    }
+    if (onVercel()) {
+      return { content: defaultContent(), source: "default" };
     }
   }
 
@@ -118,9 +141,21 @@ export async function saveSiteContent(input: unknown): Promise<SiteContent> {
     updatedAt: new Date().toISOString(),
   };
 
+  const persistWarning = getPersistWarning();
+  if (persistWarning) {
+    throw new ContentPersistError(persistWarning);
+  }
+
   if (blobConfigured()) {
-    await writeBlob(next);
-    return next;
+    try {
+      await writeBlob(next);
+      return next;
+    } catch (error) {
+      console.error("Failed to write content to Vercel Blob.", error);
+      throw new ContentPersistError(
+        "The content could not be saved to Blob storage. Check BLOB_READ_WRITE_TOKEN and try again.",
+      );
+    }
   }
 
   await writeLocalFile(next);

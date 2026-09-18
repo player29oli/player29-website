@@ -23,7 +23,7 @@ export function Footer({ content }: { content: SiteContent }) {
   const socials = visibleSocials(content.chrome.socials);
 
   return (
-    <footer className="bg-ink text-white">
+    <footer className="bg-ink text-white" data-header-tone="dark">
       <div className="container-site grid gap-10 py-14 md:grid-cols-12 md:gap-8 md:py-16">
         <div className="md:col-span-5">
           <Logo variant="dark" href="/" />

@@ -48,19 +48,10 @@ export function detectSocialNetwork(href: string): SocialNetwork {
   }
 }
 
-const PLACEHOLDER_HREF = /^(#|\/#|https?:\/\/?)$/i;
-
 export function visibleSocials<T extends { label: string; href: string }>(
   items: T[],
 ): T[] {
-  return items.filter((item) => {
-    const href = item.href.trim();
-    if (!href) return false;
-    if (PLACEHOLDER_HREF.test(href)) return false;
-    const lower = href.toLowerCase();
-    if (lower.startsWith("javascript:") || lower.startsWith("data:")) return false;
-    return true;
-  });
+  return items.filter((item) => /^https?:\/\//i.test(item.href.trim()));
 }
 
 export function socialAccessibleName(label: string, href: string): string {

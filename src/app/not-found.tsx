@@ -6,6 +6,8 @@ import { buttonVariants } from "@/components/ui/button";
 import { getSiteContent } from "@/lib/content/store";
 import { cn } from "@/lib/utils";
 
+export const dynamic = "force-dynamic";
+
 export default async function NotFound() {
   const content = await getSiteContent();
   return (

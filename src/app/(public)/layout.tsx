@@ -6,6 +6,8 @@ import { siteConfig } from "@/config/site";
 import { getSiteContent } from "@/lib/content/store";
 import { visibleSocials } from "@/lib/content/social";
 
+export const dynamic = "force-dynamic";
+
 export default async function PublicLayout({
   children,
 }: {

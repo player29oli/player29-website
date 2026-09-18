@@ -1,7 +1,7 @@
 "use server";
 
 import { headers } from "next/headers";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { getAdminEmail, getAdminPassword, isAdminConfigured } from "@/lib/auth/config";
@@ -19,7 +19,11 @@ import {
   verifyCsrfToken,
 } from "@/lib/auth/session";
 import { parseSiteContent, type SiteContent } from "@/lib/content/schema";
-import { saveSiteContent } from "@/lib/content/store";
+import {
+  CONTENT_CACHE_TAG,
+  ContentPersistError,
+  saveSiteContent,
+} from "@/lib/content/store";
 
 export type LoginState = { error: string } | null;
 
@@ -101,11 +105,24 @@ export async function saveContentAction(
   }
   try {
     const saved = await saveSiteContent(parsed);
-    revalidatePath("/", "layout");
-    revalidatePath("/privacy");
+    try {
+      updateTag(CONTENT_CACHE_TAG);
+      revalidatePath("/", "layout");
+      revalidatePath("/");
+      revalidatePath("/privacy");
+      revalidatePath("/privacy", "page");
+    } catch (error) {
+      console.error("Saved content, but the public cache could not be revalidated.", error);
+    }
     return { ok: true, content: saved };
   } catch (error) {
     console.error("Failed to save site content", error);
-    return { ok: false, error: "The content could not be saved." };
+    if (error instanceof ContentPersistError || (error instanceof Error && error.name === "ContentPersistError")) {
+      return { ok: false, error: error.message };
+    }
+    return {
+      ok: false,
+      error: "The content could not be saved. Check storage and try again.",
+    };
   }
 }

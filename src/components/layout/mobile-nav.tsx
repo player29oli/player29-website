@@ -13,9 +13,11 @@ import { cn } from "@/lib/utils";
 export function MobileNav({
   navigation,
   cta,
+  inverted = false,
 }: {
   navigation: LinkField[];
   cta: LinkField;
+  inverted?: boolean;
 }) {
   const titleId = useId();
   const [open, setOpen] = useState(false);
@@ -105,6 +107,8 @@ export function MobileNav({
         className={cn(
           buttonVariants({ variant: "outline", size: "icon" }),
           "size-11 min-h-11 min-w-11 rounded-[13px] border-ink/15",
+          inverted &&
+            "border-white/35 bg-transparent text-white hover:border-white hover:bg-white/10 hover:text-white",
         )}
         aria-label="Open menu"
         aria-expanded={open}

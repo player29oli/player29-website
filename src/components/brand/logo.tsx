@@ -39,7 +39,43 @@ type LogoProps = {
   className?: string;
   priority?: boolean;
   href?: string;
+  stacked?: boolean;
 };
+
+function Mark({
+  variant,
+  compact,
+  className,
+  priority,
+  hidden,
+  labelled,
+}: {
+  variant: "light" | "dark";
+  compact: boolean;
+  className?: string;
+  priority?: boolean;
+  hidden?: boolean;
+  labelled?: boolean;
+}) {
+  const asset = compact ? marks[variant] : wordmarks[variant];
+  return (
+    <Image
+      src={asset.src}
+      alt={labelled ? "" : asset.alt}
+      width={asset.width}
+      height={asset.height}
+      priority={priority}
+      aria-hidden={hidden || labelled}
+      className={cn(
+        "col-start-1 row-start-1",
+        compact ? "h-8 w-auto md:h-9" : "h-7 w-auto md:h-8",
+        hidden && "pointer-events-none opacity-0",
+        "transition-opacity duration-200 motion-reduce:transition-none",
+        className,
+      )}
+    />
+  );
+}
 
 export function Logo({
   variant = "light",
@@ -47,21 +83,35 @@ export function Logo({
   className,
   priority = false,
   href = "/",
+  stacked = false,
 }: LogoProps) {
-  const asset = compact ? marks[variant] : wordmarks[variant];
-  const image = (
-    <Image
-      src={asset.src}
-      alt={asset.alt}
-      width={asset.width}
-      height={asset.height}
+  const labelled = Boolean(href);
+  const image = stacked ? (
+    <span className="inline-grid items-center justify-items-start">
+      <Mark
+        variant="light"
+        compact={compact}
+        className={className}
+        priority={priority}
+        hidden={variant === "dark"}
+        labelled={labelled}
+      />
+      <Mark
+        variant="dark"
+        compact={compact}
+        className={className}
+        priority={priority && variant === "dark"}
+        hidden={variant === "light"}
+        labelled={labelled}
+      />
+    </span>
+  ) : (
+    <Mark
+      variant={variant}
+      compact={compact}
+      className={className}
       priority={priority}
-      className={cn(
-        compact
-          ? "h-8 w-auto md:h-9"
-          : "h-7 w-auto md:h-8",
-        className,
-      )}
+      labelled={labelled}
     />
   );
 

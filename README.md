@@ -106,7 +106,7 @@ The **Footer** tab edits:
 - Privacy link label and URL
 - Social links (label + URL) — add, remove and reorder
 
-Public pages only show a social when it has a real URL. LinkedIn, Instagram, X/Twitter, YouTube, TikTok, Facebook and GitHub get a matching icon; anything else uses a generic link icon. Empty or placeholder URLs stay hidden. Do not add profiles that are not live.
+Public pages only show a social when it has a real `http(s)` URL. LinkedIn, Instagram, X/Twitter, YouTube, TikTok, Facebook and GitHub get a matching icon; anything else uses a generic link icon. Empty or placeholder URLs stay hidden. After **Save changes**, the public homepage is revalidated so the footer updates without a redeploy. On Vercel, saves require `BLOB_READ_WRITE_TOKEN` — if Blob is missing, Save shows an error instead of appearing to succeed. Do not add profiles that are not live.
 
 The session is an httpOnly cookie (12 hours), SameSite=Lax. Login is CSRF-checked and rate-limited (8 attempts per 15 minutes per IP, in memory). Sign out from the editor.
 
@@ -116,9 +116,9 @@ The session is an httpOnly cookie (12 hours), SameSite=Lax. Login is CSRF-checke
 | --- | --- |
 | `content/default.json` | Committed fallback. The public site always has the current copy if the store is empty or invalid. |
 | `.data/content.json` | Local edits when `BLOB_READ_WRITE_TOKEN` is not set. Gitignored. |
-| Vercel Blob (`player29/content.json`) | When `BLOB_READ_WRITE_TOKEN` is set. This is what production on Vercel must use so saves survive deploys and serverless instances. |
+| Vercel Blob (`player29/content.json`) | Required on Vercel so saves survive deploys and serverless instances. If the token is missing on Vercel, Save returns an error instead of looking successful. |
 
-Read order: Blob (if configured) → local file → `content/default.json`.
+Read order: Blob (if configured) → local file (not on Vercel) → `content/default.json`. After a successful save the homepage layout is revalidated so the public footer updates without a redeploy.
 
 Images uploaded in the editor go to `public/uploads/` locally, or to `player29/uploads/` on Blob in production.
 
@@ -189,7 +189,7 @@ Do not commit secrets.
 2. Framework preset: Next.js. Build command: `npm run build`. Output: default.
 3. Set `NEXT_PUBLIC_SITE_URL` to the Vercel URL (for example `https://player29.vercel.app` — that exact subdomain may already be taken).
 4. Optionally set `NEXT_PUBLIC_CONTACT_FORM_ENDPOINT`.
-5. For the content editor on Vercel: create a Blob store in the project, then set `BLOB_READ_WRITE_TOKEN`, `ADMIN_EMAIL`, `ADMIN_PASSWORD` and `AUTH_SECRET`. Without the Blob token, saves cannot persist on serverless.
+5. For the content editor on Vercel: create a Blob store in the project, then set `BLOB_READ_WRITE_TOKEN`, `ADMIN_EMAIL`, `ADMIN_PASSWORD` and `AUTH_SECRET`. Without the Blob token, Save fails with a clear error — it will not write to ephemeral disk and pretend to succeed.
 6. Deploy. Preview deployments are created automatically for pull requests. Production tracks `main`.
 
 The first deploy can use the free Vercel URL. HTTPS is automatic.

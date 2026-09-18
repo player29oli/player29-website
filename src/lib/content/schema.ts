@@ -284,11 +284,35 @@ function asHref(value: unknown, fallback = ""): string {
   return isSafeHref(href) ? href : fallback;
 }
 
+function normalizeSocialHref(href: string): string {
+  const trimmed = href.trim();
+  if (!trimmed) return "";
+  if (/^https?:\/\//i.test(trimmed)) return trimmed;
+  if (trimmed.startsWith("//") && trimmed.length > 2) return `https:${trimmed}`;
+  if (/^(www\.)?[a-z0-9-]+(\.[a-z0-9-]+)+([/:?#].*)?$/i.test(trimmed)) {
+    return `https://${trimmed}`;
+  }
+  return trimmed;
+}
+
+function asSocialHref(value: unknown, fallback = ""): string {
+  const href = normalizeSocialHref(asString(value, fallback));
+  return isSafeHref(href) ? href : fallback;
+}
+
 function asLink(value: unknown, fallback: LinkField): LinkField {
   const record = isRecord(value) ? value : {};
   return {
     label: asShort(record.label, fallback.label),
     href: asHref(record.href, fallback.href),
+  };
+}
+
+function asSocialLink(value: unknown, fallback: LinkField): LinkField {
+  const record = isRecord(value) ? value : {};
+  return {
+    label: asShort(record.label, fallback.label),
+    href: asSocialHref(record.href, fallback.href),
   };
 }
 
@@ -528,7 +552,7 @@ export function parseSiteContent(value: unknown): SiteContent | null {
   const socialsRaw = Array.isArray(chromeRaw.socials) ? chromeRaw.socials : null;
   let socials = (socialsRaw ?? [])
     .slice(0, MAX_LIST_ITEMS)
-    .map((item) => asLink(item, emptyLink));
+    .map((item) => asSocialLink(item, emptyLink));
   if (socialsRaw === null) {
     const inherited = asHref(siteRaw.linkedin);
     if (inherited) {

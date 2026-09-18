@@ -20,6 +20,7 @@ export function Closing({
       id={section.anchor || "contact"}
       aria-labelledby="contact-heading"
       className="bg-ink relative overflow-hidden py-20 text-white md:py-28"
+      data-header-tone="dark"
     >
       {background.startsWith("http") ? (
         // eslint-disable-next-line @next/next/no-img-element

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 
 import { Logo } from "@/components/brand/logo";
@@ -16,30 +16,66 @@ export function Header({
   navigation: LinkField[];
   cta: LinkField;
 }) {
+  const headerRef = useRef<HTMLElement>(null);
   const [scrolled, setScrolled] = useState(false);
+  const [overDark, setOverDark] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
-    onScroll();
+    const header = headerRef.current;
+    if (!header) return;
+    let frame = 0;
+
+    const update = () => {
+      frame = 0;
+      setScrolled(window.scrollY > 8);
+      const height = header.getBoundingClientRect().height;
+      const darkSurfaces = document.querySelectorAll("[data-header-tone='dark']");
+      let match = false;
+      for (const el of darkSurfaces) {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < height && rect.bottom > 0) {
+          match = true;
+          break;
+        }
+      }
+      setOverDark(match);
+    };
+
+    const onScroll = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(update);
+    };
+
+    update();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (frame) cancelAnimationFrame(frame);
+    };
   }, []);
 
   return (
     <header
+      ref={headerRef}
+      data-over-dark={overDark ? "true" : "false"}
       className={cn(
-        "sticky top-0 z-50 border-b bg-white/88 backdrop-blur-[8px] transition-shadow",
-        scrolled
-          ? "border-ink/10 shadow-[0_1px_0_rgba(17,19,24,0.04)]"
-          : "border-transparent",
+        "sticky top-0 z-50 border-b backdrop-blur-[8px] motion-reduce:transition-none",
+        "transition-[background-color,border-color,box-shadow] duration-200",
+        overDark
+          ? "border-white/12 bg-ink/92 text-white"
+          : scrolled
+            ? "border-ink/10 bg-white/88 text-ink shadow-[0_1px_0_rgba(17,19,24,0.04)]"
+            : "border-transparent bg-white/88 text-ink",
       )}
     >
       <div className="container-site flex h-16 items-center justify-between gap-4 md:h-[4.5rem]">
         <span className="md:hidden">
-          <Logo variant="light" compact priority />
+          <Logo variant={overDark ? "dark" : "light"} compact stacked priority />
         </span>
         <span className="hidden md:inline-flex">
-          <Logo variant="light" priority />
+          <Logo variant={overDark ? "dark" : "light"} stacked priority />
         </span>
 
         <nav aria-label="Primary" className="hidden items-center gap-8 lg:flex">
@@ -47,7 +83,12 @@ export function Header({
             <Link
               key={`${item.href}-${item.label}`}
               href={item.href}
-              className="text-[15px] font-semibold text-ink/80 transition-colors hover:text-ink"
+              className={cn(
+                "text-[15px] font-semibold transition-colors motion-reduce:transition-none",
+                overDark
+                  ? "text-white/80 hover:text-white"
+                  : "text-ink/80 hover:text-ink",
+              )}
             >
               {item.label}
             </Link>
@@ -56,13 +97,20 @@ export function Header({
 
         <div className="hidden lg:block">
           {cta.label ? (
-            <Link href={cta.href || "/#contact"} className={cn(buttonVariants({ size: "cta" }))}>
+            <Link
+              href={cta.href || "/#contact"}
+              className={cn(
+                buttonVariants({ size: "cta" }),
+                overDark &&
+                  "bg-white text-ink hover:bg-white/90 focus-visible:border-white",
+              )}
+            >
               {cta.label}
             </Link>
           ) : null}
         </div>
 
-        <MobileNav navigation={navigation} cta={cta} />
+        <MobileNav navigation={navigation} cta={cta} inverted={overDark} />
       </div>
     </header>
   );

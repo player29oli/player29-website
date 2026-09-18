@@ -32,6 +32,7 @@ type AdminEditorProps = {
   editorEmail: string;
   persistTo: "blob" | "file";
   loadedFrom: ContentStoreKind;
+  persistWarning: string | null;
 };
 
 const TABS: { id: Tab; label: string }[] = [
@@ -49,6 +50,7 @@ export function AdminEditor({
   editorEmail,
   persistTo,
   loadedFrom,
+  persistWarning,
 }: AdminEditorProps) {
   const [content, setContent] = useState<SiteContent>(initialContent);
   const [tab, setTab] = useState<Tab>("homepage");
@@ -109,7 +111,7 @@ export function AdminEditor({
         return;
       }
       setContent(result.content);
-      setMessage("Saved. Refresh the public site to see the latest copy.");
+      setMessage("Saved. The public site now uses this copy.");
     });
   }
 
@@ -161,9 +163,13 @@ export function AdminEditor({
             ))}
           </nav>
           <p className="text-muted-text mt-6 text-xs leading-relaxed">
-            {persistTo === "blob"
-              ? "Saves to Vercel Blob for this deployment."
-              : "Saves to a local .data/content.json file on this machine."}{" "}
+            {persistWarning ? (
+              <span className="block font-medium text-red-800">{persistWarning}</span>
+            ) : persistTo === "blob" ? (
+              "Saves to Vercel Blob for this deployment."
+            ) : (
+              "Saves to a local .data/content.json file on this machine."
+            )}{" "}
             Currently showing {loadedFrom === "default" ? "committed default copy" : loadedFrom === "blob" ? "Blob storage" : "the local file"}.
           </p>
         </aside>

@@ -12,6 +12,7 @@ export function RichText({ section }: { section: RichTextSection }) {
         section.tone === "surface" && "border-y border-ink/6 bg-surface/60",
         ink && "bg-ink text-white",
       )}
+      data-header-tone={ink ? "dark" : undefined}
     >
       <div className="container-site max-w-3xl">
         {section.eyebrow ? (
