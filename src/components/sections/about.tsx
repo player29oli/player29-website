@@ -6,7 +6,7 @@ function FounderPlaceholder() {
       <div className="flex aspect-[4/5] flex-col items-center justify-center gap-4">
         <span
           aria-hidden
-          className="font-display text-6xl font-bold text-ink/15 md:text-7xl"
+          className="font-display text-6xl font-bold text-ink/25 md:text-7xl"
         >
           OK
         </span>
